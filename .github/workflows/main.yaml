@@ -12,14 +12,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          submodules: true # مهم جداً لهذا النوع من المستودعات
 
-      - name: Build Plugins
-        # هذا هو الرابط الصحيح الذي يعمل مع مستودع الـ Archive
-        uses: recloudstream/cloudstream-archive-action@master
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
         with:
-          # إذا كنت تستخدم Java/Kotlin اتركها false، إذا كنت تستخدم JS اجعلها true
-          is-js-repo: false 
-          # لتوليد ملف الـ JSON الخاص بالمستودع تلقائياً
-          make-repo: true
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        # سنستخدم الأمر المباشر الموجود داخل القالب بدلاً من أداة خارجية
+        run: ./gradlew make
+
+      - name: Deploy to Builds Branch
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build # المجلد الناتج بعد البناء
+          branch: builds # الفرع الذي سيتم رفع الإضافة إليه
