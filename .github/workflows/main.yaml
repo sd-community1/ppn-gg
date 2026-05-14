@@ -1,34 +1,26 @@
 name: Build and Deploy
-on:
-  push:
-    branches:
-      - main
-      - master
-  workflow_dispatch:
-
+on: [push, workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
+      - uses: actions/checkout@v3
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      # هذه الخطوة ستقوم بصناعة ملف gradlew تلقائياً في سيرفر GitHub
-      - name: Setup Gradle
+      # تثبيت نسخة Gradle مستقرة يدوياً لتجنب مشاكل النسخة 9.5
+      - name: Setup Gradle 8.5
         uses: gradle/gradle-build-action@v2
         with:
-          gradle-version: wrapper
+          gradle-version: 8.5
 
       - name: Build Plugins
-        run: gradle make
+        run: gradle make --stacktrace
 
-      - name: Deploy to Builds
+      - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: build
