@@ -2,8 +2,8 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - master
       - main
+      - master
   workflow_dispatch:
 
 jobs:
@@ -19,15 +19,17 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      # هذه الخطوة ستقوم بصناعة ملف gradlew تلقائياً في سيرفر GitHub
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
 
-      - name: Build with Gradle
-        # سنستخدم الأمر المباشر الموجود داخل القالب بدلاً من أداة خارجية
-        run: ./gradlew make
+      - name: Build Plugins
+        run: gradle make
 
-      - name: Deploy to Builds Branch
+      - name: Deploy to Builds
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: build # المجلد الناتج بعد البناء
-          branch: builds # الفرع الذي سيتم رفع الإضافة إليه
+          folder: build
+          branch: builds
