@@ -1,9 +1,20 @@
-name: Build Plugin
-on: [push]
+name: Build and Deploy
+on:
+  push:
+    branches:
+      - master # تأكد أن اسم الفرع الرئيسي عندك هو master أو قم بتغييره لـ main
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Build JS Plugin
-        uses: recloudstream/js-action@master
+        # استخدام النسخة المستقرة والموجودة فعلياً
+        uses: recloudstream/cloudstream-archive-action@master
+        with:
+          # هذا سيقوم بتحويل ملفات الـ JS إلى تنسيق يفهمه التطبيق
+          is-js-repo: true
