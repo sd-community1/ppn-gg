@@ -2,8 +2,8 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - main
       - master
+      - main
   workflow_dispatch:
 
 jobs:
@@ -12,16 +12,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          submodules: true # مهم جداً لهذا النوع من المستودعات
 
-      - name: Build with Gradle
-        # هذا هو السطر السحري للقوالب التي تحتوي على ملفات gradle
-        uses: recloudstream/gradle-main-action@master
+      - name: Build Plugins
+        # هذا هو الرابط الصحيح الذي يعمل مع مستودع الـ Archive
+        uses: recloudstream/cloudstream-archive-action@master
         with:
-          # هذا سيقوم ببناء جميع الإضافات الموجودة في المستودع
-          command: make
+          # إذا كنت تستخدم Java/Kotlin اتركها false، إذا كنت تستخدم JS اجعلها true
+          is-js-repo: false 
+          # لتوليد ملف الـ JSON الخاص بالمستودع تلقائياً
+          make-repo: true
