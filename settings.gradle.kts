@@ -6,7 +6,6 @@ pluginManagement {
         maven("https://jitpack.io")
     }
 }
-
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -15,5 +14,4 @@ dependencyResolutionManagement {
         maven("https://jitpack.io")
     }
 }
-
-rootProject.name = "ppn-gg"
+rootProject.name = "CEE-Iraq"
